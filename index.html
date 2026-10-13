@@ -114,10 +114,13 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 .products__head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:30px;margin-bottom:clamp(40px,6vw,70px)}
 .products__title{font-size:clamp(34px,5vw,66px);font-weight:600;letter-spacing:-.035em;line-height:1.02}
 .products__meta{color:var(--grey);font-size:15px;max-width:34ch;text-align:right}
-.products__stage{position:relative;border-radius:var(--radius);overflow:hidden}
-.products__stage img{width:100%;aspect-ratio:16/7;object-fit:cover}
-.products__stage::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,9,11,.6),transparent 55%)}
-.products__caption{position:absolute;left:clamp(24px,4vw,56px);bottom:clamp(24px,4vw,56px);z-index:2;max-width:440px}
+.products__stage{position:relative;aspect-ratio:16/7;border-radius:var(--radius);overflow:hidden;background:#05070b}
+.products__stage-fallback,.products__stage-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.products__stage-fallback{z-index:0}
+.products__stage-video{z-index:1;transition:opacity .6s ease}
+.products__stage-video.is-static{opacity:0}
+.products__stage::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(8,9,11,.6),transparent 55%)}
+.products__caption{position:absolute;left:clamp(24px,4vw,56px);bottom:clamp(24px,4vw,56px);z-index:3;max-width:440px}
 .products__caption h3{font-size:clamp(24px,3vw,40px);font-weight:600;letter-spacing:-.02em}
 .products__caption p{color:var(--grey);margin-top:12px;font-size:15px}
 .products__tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(28px,4vw,44px)}
@@ -196,7 +199,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   .contact__head{grid-template-columns:1fr;align-items:start}
   .contact__desc{justify-self:start}
   .contact__grid{grid-template-columns:1fr}
-  .products__stage img{aspect-ratio:16/9}
+  .products__stage{aspect-ratio:16/9}
 }
 @media(max-width:768px){
   .nav__toggle{display:flex}
@@ -320,7 +323,8 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
       <p class="products__meta reveal" data-delay="2">International buying and selling of iPhone, iPad, AirPods and MacBooks — from Dubai to the world.</p>
     </div>
     <div class="products__stage reveal">
-      <img src="./products-floating-DBS2EITC.jpg.jpeg" alt="Premium Apple devices floating composition" width="800" height="450" loading="lazy">
+      <img class="products__stage-fallback" src="./products-floating-DBS2EITC.jpg.jpeg" alt="Premium Apple devices floating composition" loading="lazy">
+      <video class="products__stage-video" id="productsVideo" src="./video-2.mp4" poster="./products-floating-DBS2EITC.jpg.jpeg" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
       <div class="products__caption">
         <h3>The devices the world wants</h3>
         <p>Premium mobile devices, traded fast and reliably across global markets.</p>
@@ -927,6 +931,31 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
     start();
     reveal();
   }
+})();
+
+// Products & Services — video fallback + reduced-motion handling
+(function(){
+  var video = document.getElementById('productsVideo');
+  if (!video) return;
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function apply(){
+    if (mq.matches){
+      video.classList.add('is-static');
+      video.pause();
+    } else {
+      video.classList.remove('is-static');
+      var p = video.play();
+      if (p && p.catch) p.catch(function(){ video.classList.add('is-static'); });
+    }
+  }
+
+  // Restore the static image if the video cannot load or play
+  video.addEventListener('error', function(){ video.classList.add('is-static'); });
+
+  if (mq.addEventListener) mq.addEventListener('change', apply);
+  else if (mq.addListener) mq.addListener(apply);
+  apply();
 })();
 </script>
 </body>

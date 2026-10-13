@@ -15,10 +15,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
 <style>
 :root{--black:#08090B;--charcoal:#121418;--charcoal-2:#16191F;--graphite:#202329;--line:rgba(255,255,255,.08);--white:#FFFFFF;--ivory:#F5F4F0;--ink:#101216;--grey:#A4A8AF;--grey-dark:#747983;--blue:#4D8DFF;--font-display:'Space Grotesk','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-body:'Inter','Space Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);--nav-h:82px;--maxw:1300px;--pad:clamp(22px,5vw,72px);--radius:16px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+section[id]{scroll-margin-top:calc(var(--nav-h) + 16px)}
 body{font-family:var(--font-body);background:var(--black);color:var(--white);line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 body.no-scroll{overflow:hidden}
 img{display:block;max-width:100%;height:auto}
@@ -43,12 +45,12 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 .btn--blue:hover{background:#3f80f5}
 .btn--ghost{border-color:rgba(255,255,255,.22);color:var(--white)}
 .btn--ghost:hover{border-color:var(--blue);color:#fff;background:rgba(77,141,255,.12)}
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease);will-change:opacity,transform}
-.reveal.is-visible{opacity:1;transform:none}
-.reveal[data-delay="1"]{transition-delay:.08s}
-.reveal[data-delay="2"]{transition-delay:.16s}
-.reveal[data-delay="3"]{transition-delay:.24s}
-.reveal[data-delay="4"]{transition-delay:.32s}
+.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease);will-change:opacity,transform}
+.js .reveal.is-visible{opacity:1;transform:none}
+.js .reveal[data-delay="1"]{transition-delay:.08s}
+.js .reveal[data-delay="2"]{transition-delay:.16s}
+.js .reveal[data-delay="3"]{transition-delay:.24s}
+.js .reveal[data-delay="4"]{transition-delay:.32s}
 .site-header{position:fixed;top:0;left:0;width:100%;z-index:1000;transition:background .5s var(--ease),border-color .5s;border-bottom:1px solid transparent}
 .site-header.is-scrolled{background:rgba(8,9,11,.82);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-color:var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h)}
@@ -203,7 +205,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 .footer__bottom{margin-top:48px;padding-top:24px;border-top:1px solid #E5E7EB;display:flex;flex-wrap:wrap;justify-content:flex-start;gap:12px;color:#5F6368;font-size:13px;letter-spacing:.02em;line-height:1.7}
 .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:var(--graphite);border:1px solid var(--line);color:var(--white);padding:14px 24px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s var(--ease);z-index:2000;max-width:90vw;text-align:center}
 .toast.is-visible{opacity:1;transform:translate(-50%,0)}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.hero__statement .pulse,.hero__scroll .line{animation:none}.products__secondary .media img{transition:none}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .reveal{opacity:1;transform:none;transition:none}.hero__statement .pulse,.hero__scroll .line{animation:none}.products__secondary .media img{transition:none}*,*::before,*::after{transition:none!important;animation:none!important}}
 @media(max-width:1024px){
   .hero__grid{grid-template-columns:1fr}
   .hero{min-height:auto}
@@ -289,7 +291,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
     <div class="about__media reveal" data-delay="1">
       <div class="frame" aria-hidden="true"></div>
       <div class="globe" id="globe" role="img" aria-label="Interactive 3D visualization of global mobile device trading across world markets">
-        <img class="globe__fallback" src="./global-mobile-trade-Bb7BkSvI.jpg.jpeg" alt="Global mobile device trading network across world markets" width="1280" height="720" loading="lazy">
+        <img class="globe__fallback" src="./global-mobile-trade-Bb7BkSvI.jpg.jpeg" alt="Global mobile device trading network across world markets" width="1280" height="720" loading="lazy" decoding="async">
         <canvas class="globe__canvas" id="globeCanvas" aria-hidden="true"></canvas>
         <div class="globe__light" aria-hidden="true"></div>
       </div>
@@ -341,8 +343,8 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
       <p class="products__meta reveal" data-delay="2">International buying and selling of iPhone, iPad, AirPods and MacBooks — from Dubai to the world.</p>
     </div>
     <div class="products__stage reveal">
-      <img class="products__stage-fallback" src="./products-floating-DBS2EITC.jpg.jpeg" alt="Premium Apple devices floating composition" loading="lazy">
-      <video class="products__stage-video" id="productsVideo" src="./video-2.mp4" poster="./products-floating-DBS2EITC.jpg.jpeg" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+      <img class="products__stage-fallback" src="./products-floating-DBS2EITC.jpg.jpeg" alt="Premium Apple devices floating composition" loading="lazy" decoding="async">
+      <video class="products__stage-video" id="productsVideo" src="./video-2.mp4" poster="./products-floating-DBS2EITC.jpg.jpeg" muted loop playsinline preload="none" aria-hidden="true"></video>
       <div class="products__caption">
         <h3>The devices the world wants</h3>
         <p>Premium mobile devices, traded fast and reliably across global markets.</p>
@@ -357,7 +359,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
     </div>
     <div class="products__secondary">
       <div class="media reveal">
-        <img src="./sell-global.png" alt="International mobile device services" width="1280" height="720" loading="lazy">
+        <img src="./sell-global.png" alt="International mobile device services" width="1280" height="720" loading="lazy" decoding="async">
       </div>
       <div class="products__secondary-text reveal" data-delay="1">
         <h3>Global buying &amp; selling</h3>
@@ -378,13 +380,13 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
       </div>
     </div>
     <div class="team__media reveal" data-delay="1">
-      <img src="./team-photo.png" alt="The NOEMI team working together" width="1774" height="887" loading="lazy">
+      <img src="./team-photo.png" alt="The NOEMI team working together" width="1774" height="887" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
 <section class="vision" id="vision">
   <div class="vision__bg" aria-hidden="true">
-    <img src="./global-mobile-trade-Bb7BkSvI.jpg.jpeg" alt="" width="1280" height="720" loading="lazy">
+    <img src="./global-mobile-trade-Bb7BkSvI.jpg.jpeg" alt="" width="1280" height="720" loading="lazy" decoding="async">
   </div>
   <div class="container vision__inner">
     <span class="eyebrow eyebrow--center reveal">Our Vision</span>
@@ -444,7 +446,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
     <div class="footer__top">
       <div>
         <a href="#top" class="footer__logo" aria-label="NOEMI — back to top">
-          <img src="./noemi-original-logo.webp" alt="NOEMI" width="160" height="40">
+          <img src="./noemi-original-logo.webp" alt="NOEMI" width="160" height="40" loading="lazy" decoding="async">
         </a>
         <p class="footer__brand-tag">Mobile Excellence Since 1998 — global mobile-device trading from Dubai DAFZA FREEZONE.</p>
       </div>
@@ -942,25 +944,48 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   }
 })();
 
-// Products & Services — video fallback + reduced-motion handling
+// Products & Services — video fallback, in-view playback + reduced-motion handling
 (function(){
   var video = document.getElementById('productsVideo');
   if (!video) return;
   var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var inView = false;
 
-  function apply(){
-    if (mq.matches){
-      video.classList.add('is-static');
-      video.pause();
-    } else {
-      video.classList.remove('is-static');
-      var p = video.play();
-      if (p && p.catch) p.catch(function(){ video.classList.add('is-static'); });
-    }
+  function play(){
+    if (mq.matches) return;
+    video.classList.remove('is-static');
+    var p = video.play();
+    if (p && p.catch) p.catch(function(){ video.classList.add('is-static'); });
+  }
+  function pause(){
+    video.pause();
   }
 
   // Restore the static image if the video cannot load or play
   video.addEventListener('error', function(){ video.classList.add('is-static'); });
+
+  function apply(){
+    if (mq.matches){
+      video.classList.add('is-static');
+      pause();
+    } else if (inView){
+      play();
+    }
+  }
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        inView = e.isIntersecting;
+        if (inView && !mq.matches) play();
+        else pause();
+      });
+    }, { rootMargin: '0px 0px 15% 0px' });
+    io.observe(video);
+  } else {
+    inView = true;
+    play();
+  }
 
   if (mq.addEventListener) mq.addEventListener('change', apply);
   else if (mq.addListener) mq.addListener(apply);

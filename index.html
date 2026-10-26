@@ -11,11 +11,15 @@
 <meta property="og:image" content="./opengraph-image-p98pqg.png">
 <meta property="og:url" content="./index.html">
 <meta name="theme-color" content="#08090B">
-<link rel="icon" type="image/png" href="./favicon.ico.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js');</script>
+<script>document.documentElement.classList.add('js','gsap-pending');setTimeout(function(){document.documentElement.classList.remove('gsap-pending');},2500);</script>
 <style>
 :root{--black:#08090B;--charcoal:#121418;--charcoal-2:#16191F;--graphite:#202329;--line:rgba(255,255,255,.08);--white:#FFFFFF;--ivory:#F5F4F0;--ink:#101216;--grey:#A4A8AF;--grey-dark:#747983;--blue:#4D8DFF;--font-display:'Space Grotesk','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-body:'Inter','Space Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);--nav-h:82px;--maxw:1300px;--pad:clamp(22px,5vw,72px);--radius:16px;
 --orange:#f18c4a; --brand-purple:#1038a0;
@@ -85,8 +89,21 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 .hero__glow--2{width:44vw;height:44vw;bottom:-16vw;left:-14vw;background:radial-gradient(circle,rgba(77,141,255,.16),transparent 65%)}
 .hero__grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(32px,5vw,80px);width:100%;padding:clamp(40px,7vw,110px) 0}
 .hero__kicker{margin-bottom:28px}
-.hero__title{font-size:clamp(64px,12.5vw,182px);font-weight:700;letter-spacing:-.045em;line-height:.9}
-.hero__tagline{margin-top:28px;font-family:var(--font-display);font-size:clamp(20px,2.4vw,30px);font-weight:400;letter-spacing:-.01em;color:var(--white)}
+.hero__title{font-size:clamp(40px,4.6vw,72px);font-weight:600;letter-spacing:-.04em;line-height:1.02}
+.hero__line{display:block;overflow:hidden;white-space:nowrap;padding:.06em 0 .12em;margin-bottom:-.12em}
+.hero__line--muted{color:rgba(255,255,255,.38)}
+.hero__rotator{position:relative;display:inline-grid;vertical-align:top}
+.hero__word{grid-area:1/1;color:var(--orange)}
+.hero__word:not(:first-child){visibility:hidden}
+.hero__word.is-split{visibility:visible}
+.hero__char{display:inline-block;will-change:transform}
+.hero__underline{display:block;height:2px;width:min(220px,40%);margin-top:18px;background:linear-gradient(90deg,var(--orange),rgba(241,140,74,0));transform-origin:left center}
+.hero__tagline{margin-top:28px;max-width:34ch;font-size:clamp(16px,1.35vw,19px);font-weight:400;line-height:1.6;color:var(--grey)}
+.hero__tagline strong{font-family:var(--font-display);font-weight:600;color:var(--white);letter-spacing:.04em}
+.hero__stats{display:flex;gap:clamp(24px,3.4vw,48px);margin-top:44px;padding-top:26px;border-top:1px solid var(--line);max-width:520px}
+.hero__stat strong{display:block;font-family:var(--font-display);font-size:clamp(20px,1.9vw,26px);font-weight:600;letter-spacing:-.02em;color:var(--white);line-height:1.1}
+.hero__stat span{display:block;margin-top:6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-dark)}
+.gsap-pending .hero__content,.gsap-pending .hero__media{visibility:hidden}
 .hero__statement{display:inline-flex;align-items:center;justify-content:center;margin-top:42px;padding:0 24px;height:44px;border-radius:999px;font-size:15px;font-weight:500;line-height:1;color:#FFFFFF;background:#f58e4b;white-space:nowrap;transition:background .2s ease}
 .hero__statement:hover{background:#f58e4b}
 .hero__statement:focus-visible{outline:2px solid #005EB8;outline-offset:3px}
@@ -94,8 +111,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(77,141,255,.55)}70%{box-shadow:0 0 0 14px rgba(77,141,255,0)}100%{box-shadow:0 0 0 0 rgba(77,141,255,0)}}
 .hero__media{position:relative}
 .hero__media::before{content:"";position:absolute;inset:10% 6%;border-radius:50%;background:radial-gradient(circle,rgba(77,141,255,.22),transparent 62%);filter:blur(46px);pointer-events:none}
-.hero__media img{position:relative;z-index:1;display:block;width:90%;margin:0 auto;height:auto;object-fit:contain;object-position:center;animation:heroImgIn .9s var(--ease) backwards;animation-delay:.16s}
-@keyframes heroImgIn{from{transform:scale(.97)}to{transform:scale(1)}}
+.hero__media img{position:relative;z-index:1;display:block;width:90%;margin:0 auto;height:auto;object-fit:contain;object-position:center}
 .hero__cursor-light{position:absolute;left:0;top:0;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(77,141,255,.16),transparent 62%);pointer-events:none;opacity:0;will-change:transform;transition:opacity .3s ease}
 .hero__scroll{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--orange);font-size:11px;letter-spacing:.3em;text-transform:uppercase}
 .hero__scroll .line{width:1px;height:46px;background:linear-gradient(var(--orange),transparent);animation:drip 2.2s var(--ease) infinite}
@@ -304,7 +320,10 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   .nav__links{position:fixed;inset:0;background:rgba(8,9,11,.97);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;gap:36px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
   .nav__links.is-open{opacity:1;pointer-events:auto}
   .nav__link{font-size:26px;font-family:var(--font-display);letter-spacing:0}
-  .hero__title{font-size:clamp(54px,17vw,110px)}
+  .hero__title{font-size:clamp(30px,8.4vw,60px)}
+  .hero__kicker{font-size:10px;letter-spacing:.18em;gap:10px}
+  .hero__kicker::before{width:20px}
+  .hero__stats{gap:22px}
 }
 @media(max-width:640px){
   .promise__grid{grid-template-columns:1fr}
@@ -371,16 +390,26 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   <div class="hero__cursor-light" aria-hidden="true"></div>
   <div class="container hero__grid" style="padding-left:4.2%;">
     <div class="hero__content">
-      <span class="eyebrow hero__kicker reveal">Global Trading • Dubai DAFZA FREEZONE</span>
-      <h1 class="hero__title reveal" data-delay="1">NOEMI</h1>
-      <p class="hero__tagline reveal" data-delay="2">Mobile Excellence Since 1998</p>
-      <div class="hero__statement reveal" data-delay="3">
+      <span class="eyebrow hero__kicker">Global Trading • Dubai DAFZA FREEZONE</span>
+      <h1 class="hero__title" aria-label="Premium devices, delivered worldwide.">
+        <span class="hero__line" aria-hidden="true">Premium devices,</span>
+        <span class="hero__line hero__line--muted" aria-hidden="true">delivered</span>
+        <span class="hero__line" aria-hidden="true"><span class="hero__rotator"><span class="hero__word">worldwide.</span><span class="hero__word">across Europe.</span><span class="hero__word">with trust.</span><span class="hero__word">at scale.</span></span></span>
+      </h1>
+      <span class="hero__underline" aria-hidden="true"></span>
+      <p class="hero__tagline"><strong>NOEMI</strong> — Mobile Excellence Since 1998. iPhone, iPad, AirPods &amp; MacBook, traded from Dubai to the world.</p>
+      <div class="hero__statement">
         <span class="pulse" aria-hidden="true"></span>
         <a role="button" href="#promise" tabindex="0" style="cursor:pointer;">Fastest Delivery in Europe</a>
       </div>
+      <ul class="hero__stats">
+        <li class="hero__stat"><strong>1998</strong><span>Established</span></li>
+        <li class="hero__stat"><strong>DAFZA</strong><span>Dubai Freezone</span></li>
+        <li class="hero__stat"><strong>Global</strong><span>Buy &amp; Sell</span></li>
+      </ul>
     </div>
-    <div class="hero__media reveal" data-delay="2">
-      <img src="./iphone-18-pro-max.png" alt="Premium iPhone product photography" width="1261" height="1247" fetchpriority="high">
+    <div class="hero__media">
+      <img src="./iphone-duo-noemi-.png" alt="Premium iPhone product photography" width="1261" height="1247" fetchpriority="high">
     </div>
   </div>
   <a href="#about" class="hero__scroll" aria-label="Scroll to content">
@@ -586,12 +615,15 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 1998–2026 NOEMI.ae • Global Mobile Excellence • Dubai DAFZA FREEZONE</span>
+      <span>© 1998–2026 NOEMI.ae | Global Mobile Excellence | Dubai DAFZA FREEZONE</span>
       <img class="footer__payments" src="./pays.webp" alt="Contact information" loading="lazy" decoding="async">
     </div>
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="./js/vendor/gsap.min.js"></script>
+<script src="./js/vendor/SplitText.min.js"></script>
+<script src="./js/vendor/ScrollTrigger.min.js"></script>
 <script>
 (function(){
   'use strict';
@@ -809,6 +841,64 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
     mx = 0.5;
     my = 0.5;
     if (!raf) raf = requestAnimationFrame(frame);
+  });
+})();
+
+// Hero headline — GSAP SplitText intro + rotating words
+(function(){
+  var root = document.documentElement;
+  var hero = document.getElementById('hero');
+  if (!hero || !window.gsap || !window.SplitText) { root.classList.remove('gsap-pending'); return; }
+  gsap.registerPlugin(SplitText, ScrollTrigger);
+
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lines = hero.querySelectorAll('.hero__line:not(:last-child)');
+  var words = Array.prototype.slice.call(hero.querySelectorAll('.hero__word'));
+
+  document.fonts.ready.then(function(){
+    var lineChars = [];
+    Array.prototype.forEach.call(lines, function(l){
+      lineChars = lineChars.concat(new SplitText(l, { type: 'words,chars', tag: 'span', charsClass: 'hero__char', aria: 'none' }).chars);
+    });
+    var wordChars = words.map(function(w){
+      var chars = new SplitText(w, { type: 'chars', tag: 'span', charsClass: 'hero__char', aria: 'none' }).chars;
+      if (w !== words[0]) gsap.set(chars, { yPercent: 115 });
+      w.classList.add('is-split');
+      return chars;
+    });
+
+    root.classList.remove('gsap-pending');
+    if (reducedMotion) return;
+
+    // Intro
+    gsap.timeline({ defaults: { ease: 'expo.out' } })
+      .from('.hero__kicker', { autoAlpha: 0, x: -24, duration: 1 })
+      .from(lineChars, { yPercent: 115, duration: 1.2, stagger: 0.02 }, 0.15)
+      .from(wordChars[0], { yPercent: 115, duration: 1.2, stagger: 0.03 }, 0.55)
+      .from('.hero__underline', { scaleX: 0, duration: 1.4, ease: 'power4.inOut' }, 0.8)
+      .from(['.hero__tagline', '.hero__statement'], { autoAlpha: 0, y: 24, duration: 1, stagger: 0.12 }, 0.95)
+      .from('.hero__stat', { autoAlpha: 0, y: 16, duration: 0.9, stagger: 0.1 }, 1.2)
+      .from('.hero__media', { autoAlpha: 0, scale: 0.92, y: 40, duration: 1.6 }, 0.3)
+      .from('.hero__scroll', { autoAlpha: 0, duration: 1 }, 1.4)
+      .add(rotate, 3.8);
+
+    // Rotating accent word
+    var current = 0;
+    function rotate(){
+      var out = wordChars[current];
+      current = (current + 1) % wordChars.length;
+      gsap.to(out, { yPercent: -115, duration: 0.6, stagger: 0.015, ease: 'power3.in' });
+      gsap.fromTo(wordChars[current], { yPercent: 115 }, {
+        yPercent: 0, duration: 0.9, stagger: 0.02, ease: 'expo.out', delay: 0.45,
+        onComplete: function(){ gsap.delayedCall(2.2, rotate); }
+      });
+    }
+
+    // Scroll-out parallax
+    gsap.to('.hero__content', {
+      yPercent: -14, autoAlpha: 0.15, ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+    });
   });
 })();
 

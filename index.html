@@ -130,13 +130,27 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
 .about__body{margin-top:34px;display:flex;flex-direction:column;gap:22px;max-width:52ch}
 .about__body p{font-size:clamp(16px,1.4vw,19px);color:#3a3f47;line-height:1.75}
 .about__media{position:relative}
-.about__media .globe{position:relative;z-index:1;aspect-ratio:16/11;border-radius:var(--radius);overflow:hidden;background:radial-gradient(120% 120% at 50% 38%,#0c1526 0%,#081020 46%,#05080f 100%);box-shadow:0 30px 60px -34px rgba(10,16,30,.5)}
+.about__grid>*{min-width:0}
+.about__media .globe{position:relative;z-index:1;aspect-ratio:1/1;border-radius:28px;overflow:hidden;cursor:grab;touch-action:pan-y;background:radial-gradient(90% 70% at 50% 100%,rgba(241,140,74,.14),transparent 60%),radial-gradient(120% 90% at 50% 0%,#151a24 0%,#0a0c11 55%,#060709 100%);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 50px 90px -40px rgba(10,16,30,.55),0 18px 36px -24px rgba(241,140,74,.25)}
+.about__media .globe.is-dragging{cursor:grabbing}
+.about__media .globe::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;z-index:2;background:linear-gradient(to top,rgba(6,7,9,.92),rgba(6,7,9,0));pointer-events:none}
+.about__media .globe::before{content:"";position:absolute;inset:0;z-index:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent 38%,#000 75%);mask-image:radial-gradient(circle at 50% 50%,transparent 38%,#000 75%);pointer-events:none}
 .about__media .globe__fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;transition:opacity .8s var(--ease)}
-.about__media .globe__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;opacity:0;transform:scale(.96);transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.about__media .globe.is-ready .globe__canvas{opacity:1;transform:scale(1)}
+.about__media .globe__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;opacity:0;transform:scale(.94) rotate(-4deg);transition:opacity 1.2s var(--ease),transform 1.6s var(--ease)}
+.about__media .globe.is-ready .globe__canvas{opacity:1;transform:none}
 .about__media .globe.is-ready .globe__fallback{opacity:0}
-.about__media .globe__light{position:absolute;left:0;top:0;z-index:3;width:52%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(120,150,255,.18),rgba(139,92,246,.10) 45%,transparent 70%);mix-blend-mode:screen;pointer-events:none;opacity:0;will-change:transform;transition:opacity .3s ease}
-.about__media .frame{position:absolute;inset:24px -24px -24px 24px;border:1px solid rgba(16,18,22,.14);border-radius:var(--radius)}
+.globe__chip{position:absolute;top:22px;left:22px;z-index:3;display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;font-size:12px;font-weight:500;letter-spacing:.04em;pointer-events:none}
+.globe__chip .dot{position:relative;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.globe__chip .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--orange);animation:chipPulse 2s var(--ease) infinite}
+@keyframes chipPulse{from{transform:scale(.6);opacity:1}to{transform:scale(1.8);opacity:0}}
+.globe__coords{position:absolute;top:28px;right:24px;z-index:3;font-family:var(--font-display);font-size:11px;letter-spacing:.14em;color:rgba(255,255,255,.4);pointer-events:none}
+.globe__caption{position:absolute;left:22px;right:22px;bottom:22px;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;pointer-events:none}
+.globe__caption strong{display:block;font-family:var(--font-display);font-size:clamp(16px,1.5vw,20px);font-weight:600;letter-spacing:-.01em;color:#fff}
+.globe__caption span{display:block;margin-top:4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.globe__caption em{font-style:normal;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);white-space:nowrap}
+@media(hover:none){.globe__caption em{display:none}}
+@media(max-width:480px){.globe__coords{display:none}}
+.about__media .frame{position:absolute;inset:-14px;border:1px solid rgba(16,18,22,.08);border-radius:40px}
 .promise{background:var(--black)}
 .promise__head{display:flex;flex-direction:column;gap:18px;margin-bottom:clamp(48px,7vw,90px)}
 .promise__title{font-size:clamp(38px,6vw,80px);font-weight:600;letter-spacing:-.035em}
@@ -431,7 +445,12 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
       <div class="globe" id="globe" role="img" aria-label="Interactive 3D visualization of global mobile device trading across world markets">
         <img class="globe__fallback" src="./global-mobile-trade-Bb7BkSvI.jpg.jpeg" alt="Global mobile device trading network across world markets" width="1280" height="720" loading="lazy" decoding="async">
         <canvas class="globe__canvas" id="globeCanvas" aria-hidden="true"></canvas>
-        <div class="globe__light" aria-hidden="true"></div>
+        <div class="globe__chip" aria-hidden="true"><span class="dot"></span>Dubai DAFZA · Headquarters</div>
+        <div class="globe__coords" aria-hidden="true">25.20° N · 55.27° E</div>
+        <div class="globe__caption" aria-hidden="true">
+          <div><strong>Buying &amp; selling worldwide</strong><span>iPhone · iPad · AirPods · MacBook</span></div>
+          <em>Drag to explore</em>
+        </div>
       </div>
     </div>
   </div>
@@ -902,7 +921,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   });
 })();
 
-// Global Excellence — interactive 3D globe visualization (Canvas 2D, no dependencies)
+// Global Excellence — dotted-earth globe with Dubai trade routes (Canvas 2D, no dependencies)
 (function(){
   var globe = document.getElementById('globe');
   var canvas = document.getElementById('globeCanvas');
@@ -912,252 +931,259 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.04;let
   if (!ctx) return; // graceful fallback: the static image remains visible
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  var W = 0, H = 0, R = 0, cx = 0, cy = 0, dpr = 1;
-  var dots = [];   // {p:{x,y,z}, kind:'grid'|'land'}
-  var hubs = [];   // {p:{x,y,z}, home:bool}
-  var arcs = [];   // {pts:[{x,y,z}], speed, phase}
+  // 360x180 land bitmask (1° cells, Natural Earth 110m), base64
+  var LAND_MASK = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA/v8/AOD//z8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+///D/////5//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAH/j/+//////8PAAAAgB0AAHgAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAAAAAOD//wP8//////8BAACAfx4AAAAAAAAAAP4AAAAAAAAAAAAAAAAAAAAAAAA4+I73//n///////8AAAAAfwAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAOAQACDwP4D///////8BAAAAPAQAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAADzAgPP5H8D//////38AAAAAAAAAAAAA4AEAAAD+DwAAAAAAAAAAAAAAAAAAAIC/g7PfBwAA/v////8AAAAAAAAAAADgBwAAwP//PwAA4B8AAAAAAAAAAAAAAAAMAAB8AgAA+P////8AAAAAAAAAAABwAAAA/P//AwAAAAAAAAAAAAAAAAAAAP8Ahvc5OwAA8P///38AAAAAAAAAAAAcAADg////34cHAAcAAAAAAAAAAAAAgN9/xzf8RwAA4P///z8AAAAAAAAAAAAPAB7g//////8fgD8AAAAAAQAAAAAAAO//B3f8/wsA4P///z8AAAAAAAAAAAAPAG////////8f2f8HAAAAAAD4HwAAAAD4H/D4/38A4P///xMAAAAAAPAHAAAAgN//////////////DwAAAAD+///h/4//H+/Bg/8BwP7//w8AAAAAwP8fAAAAj9///////////////88/A+D///////8DB8TPB/4AAP///wAAAAAA8P//AwDjf77/////////////////DwD////////////vh/kPwP//BwAAAAAA/P//H/P//5//////////////////34H8////////////Afw/gP//AQAQAAAA/v8fH////+///////////////////vD///////////9fAPwYgP8PAOA/AAAA/+N/8P//////////////////////QID4///////////Pw/0DAP8HAMAfAACA//F//v////////////////////8/AAP4///////////BBPAHAP4HAAAAAADg//z///////////////////////9/AID///////////8AQ4ABAPwBAAAAAAD8P/7///////////////////////9fAMD//////////z8AwA8AAPgBAAAAAAD+H/7/////////////////////Of8BAID///z//////z8AwD8AAMABAAAAAAD+P/z///////////////////9/wH8AAAD8MwD//////x8AwH8MAAAAAAAAAAD+P2D///////////////////95cAAAAACAAwD8/////38AwP8eAAAAAAAAgAGcH/D//////////////////wEAOAAAAADADgDA/////38AgP8/AAAAAAAAwANAH/T//////////////////wAAfgAAAAAwAAAA//////8PgP8/AAAAAAAAwAFwD/7/////////////////PwAAfwAAAAAGAAAA//////8/wP//AAAAAAAAwAOwA/7/////////////////DwCAPwAAAIAAAAAA/v//////8///BwAAAAAAOAcgcP//////////////////HwAAHwAAAAAAAACA+P//////4///DwAAAAAAOA74/////////////////////wUADwAAAAAAAAAA8P//////4///DwAAAAAAGD///////////////////////wUAAwAAAAAAAAAA8P//////7///FwAAAAAAAB///////////////////////wUAAgAAAAAAAAAA0P//////////DAAAAAAAgOH//////////////////////w0AAAAAAAAAAAAAYP////////8xLAAAAAAAAPz//////////////////////wwAAAAAAAAAAAAAAP7//////38HfgAAAAAAgP///////////////////////wQAAAAAAAAAAAAAAP3///////8HUAAAAAAAAP7/////////////////////fwQAAAAAAAAAAAAAAP////////+XAAAAAAAAAPz///93/D/+////////////PwwAAAAAAAAAAAAAAP////////9/AAAAAAAAAPj//f9j/g/+////////////HwAAAAAAAAAAAAAAAP////////8MAAAAAAAAAPj/+P8B/Mf/////////////DwQAAAAAAAAAAAAAAP///////z8AAAAAAAAAcPzH8/8A8I//////////////Bx4AAAAAAAAAAAAAAP///////x8AAAAAAAAA+H+Aw/8AwA/+//////////9/AA8AAAAAAAAAAAAAAP///////x8AAAAAAAAA+D8Aj//w4R/8//////////8/AAAAAAAAAAAAAAAAAP///////wMAAAAAAAAA+B8wuE/+/z/+/////////98fAAMAAAAAAAAAAAAAAP///////wMAAAAAAAAA+A8wEMf//x/+/////////0cOAAMAAAAAAAAAAAAAAP7//////wEAAAAAAAAA+A8AAM7//x/8/////////wMOAAEAAAAAAAAAAAAAAP7//////wAAAAAAAAAA+AcABob//z/8/////////zccwAEAAAAAAAAAAAAAAPz//////wAAAAAAAAAAQOB/AAQ2/////////////x8c8AEAAAAAAAAAAAAAAPj//////wAAAAAAAAAAQPx/AAAA/////////////w8Y/gEAAAAAAAAAAAAAAPD/////fwAAAAAAAAAA4P8/AAAA/////////////w+EGwAAAAAAAAAAAAAAAMD/////HwAAAAAAAAAA8P9/AACA/////////////x/AAwAAAAAAAAAAAAAAAID/////DwAAAAAAAAAA+P//BwaA/////////////x/AAAAAAAAAAAAAAAAAAID9////BwAAAAAAAAAA/P//D3+E/////////////z9AAAAAAAAAAAAAAAAAAAD5////BwAAAAAAAAAA/P//f////////////////x8AAAAAAAAAAAAAAAAAAADy/x8GBgAAAAAAAAAA/P/////v/8///////////z8AAAAAAAAAAAAAAAAAAAD0/w8ABgAAAAAAAAAA/v////+//4///////////z8AAAAAAAAAAAAAAAAAAADu/wcADgAAAAAAAACA//////8f/x/+/////////x8AAAAAAAAAAAAAAAAAAACI/wcALAAAAAAAAADA//////8//z/g/////////w8AAAAAAAAAAAAAAAAAAACQ/wcACAAAAAAAAADg//////9//r+A/////////wcAAAAAAAAAAAAAAAAAAAAQ/wMAAAAAAAAAAADg//////9//n8cgP///////ycAAAAAAAAAAAAAAAAAAAAA/gMAAAAAAAAAAADw////////+P9/AP///////xEAAAAAAAAAAAAAAAAAAAAA/AMAHQAAAAAAAADw////////+P//APz/f///fxAAAAAAAAAAAAAAAAAAAAAA+AcAYAAAAAAAAAD4////////+f9/APz/B///BgAAAAAAAAAAAAAAAAAAAAAA/AccgAEAAAAAAADw////////8f9/AOD/B/5/AAAAAAAAAAAAAAAAAQAAAAAA+A8eADgAAAAAAADw////////4f8/AOD/Afw/BgAAAAAAAAAAAAAAAAAAAAAA8J8PAPwCAAAAAADw////////4/8fAOD/APw/AgAAAAAAAAAAAAAAAAAAAAAAgP8PAAAAAAAAAADw////////x/8HAOB/APx/ADAAAAAAAAAAAAAAAAAAAAAAAP4PAAAAAAAAAAD4////////h/8BAOA/APz/ADAAAAAAAAAAAAAAAAAAAAAAAID/AAAAAAAAAAD4////////j/8AAMAPAMD/ATAAAAAAAAAAAAAAAAAAAAAAAAD/AQAAAAAAAAD4////////nx8AAMAPAMD/ATAAAAAAAAAAAAAAAAAAAAAAAAD8AAAAAAAAAAD4////////vwcAAIAPAMD/AcAAAAAAAAAAAAAAAAAAAAAAAADgAQAAAAAAAAD4////////fwAAAIAPAMD8AQABAAAAAAAAAAAAAAAAAAAAAADAAAgAAAAAAADw////////f2AAAAAPAID4AUACAAAAAAAAAAAAAAAAAAAAAADAAe9TAAAAAADg/////////34AAAAPAEBwAAgAAAAAAAAAAAAAAAAAAAAAAAAAE+9/AAAAAADA/////////38AAAAXAEAgAAQCAAAAAAAAAAAAAAAAAAAAAAAAz///AAAAAACA/////////z8AAAASAMAAAIACAAAAAAAAAAAAAAAAAAAAAAAAyP//AQAAAACA/////////z8AAAAwAIAAAEAHAAAAAAAAAAAAAAAAAAAAAAAAgP//AwAAAAAA/v///////x8AAAAwAAADAAMBAAAAAAAAAAAAAAAAAAAAAAAAwP//fwAAAAAA/A/+/////x8AAAAAAAAHAAcAAAAAAAAAAAAAAAAAAAAAAAAAgP///wAAAAAAEAD8/////w8AAAAAADAGwAcAAAAAAAAAAAAAAAAAAAAAAAAAgP///wEAAAAAAADA/////wcAAAAAAGAG4AEAAAAAAAAAAAAAAAAAAAAAAAAA4P///wEAAAAAAADA/////wMAAAAAAMAM+AMAAAAAAAAAAAAAAAAAAAAAAAAA4P///wMAAAAAAADg/////wEAAAAAAIAL/gMQAAAAAAAAAAAAAAAAAAAAAAAA8P///wMAAAAAAADg////fwAAAAAAAIAH/vMQAAAAAAAAAAAAAAAAAAAAAAAA8P///wcAAAAAAADg////PwAAAAAAAAAP/gMAAQAAAAAAAAAAAAAAAAAAAAAA+P///38AAAAAAADg////PwAAAAAAAAAO/DmAAwAAAAAAAAAAAAAAAAAAAAAA+P///38BAAAAAADA////HwAAAAAAAAA+/DkA8gAAAAAAAAAAAAAAAAAAAAAA8P////8fAAAAAACA////DwAAAAAAAAA8wChE/gcAAAAAAAAAAAAAAAAAAAAA+P////8/AAAAAACA////BwAAAAAAAAA4AEAA8B8AAAAAAAAAAAAAAAAAAAAA+P//////AQAAAAAA////BwAAAAAAAAAwAEAAxD8NAAAAAAAAAAAAAAAAAAAA+P//////AQAAAAAA////BwAAAAAAAADAAQAAxP+AAAAAAAAAAAAAAAAAAAAA8P//////AQAAAAAA/v//BwAAAAAAAACAHwAAwH8ABAAAAAAAAAAAAAAAAAAA4P//////AQAAAAAA/v//BwAAAAAAAAAAQFYEAMcAAAAAAAAAAAAAAAAAAAAA4P//////AAAAAAAA/v//DwAAAAAAAAAAAAgBAIABMAAAAAAAAAAAAAAAAAAAwP//////AAAAAAAA/v//DwAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAgP////9/AAAAAAAA/P//DwAAAAAAAAAAAAAAAQQAAAAAAAAAAAAAAAAAAAAAgP////8/AAAAAAAA/v//HyAAAAAAAAAAAACAHwQAAAAAAAAAAAAAAAAAAAAAAP////8fAAAAAAAA/v//HyAAAAAAAAAAAADADwwAAAAAAAAAAAAAAAAAAAAAAP////8fAAAAAAAA////HzAAAAAAAAAAAADsDxwAAAAAAAAAAAAAAAAAAAAAAP7///8fAAAAAAAA////DzgAAAAAAAAAAAD/DxwAAAAAAAAAAAAAAAAAAAAAAPj///8fAAAAAAAA////Dz8AAAAAAAAAAAD/Pz4AAAiAAAAAAAAAAAAAAAAAAOD///8fAAAAAAAA////Ax8AAAAAAAAAAMD//z4AAABAAAAAAAAAAAAAAAAAAMD///8PAAAAAAAA////AB8AAAAAAAAAAMD//z8AAAAAAAAAAAAAAAAAAAAAAMD///8PAAAAAAAA/v9/AB8AAAAAAAAAAOD//38AAAAAAAAAAAAAAAAAAAAAAMD///8PAAAAAAAA/v9/AB8AAAAAAAAAAPz///8BAAEAAAAAAAAAAAAAAAAAAMD///8HAAAAAAAA/P9/gA8AAAAAAAAAgP////8BAAIAAAAAAAAAAAAAAAAAAMD///8DAAAAAAAA/P//gA8AAAAAAAAAwP////8DAAAAAAAAAAAAAAAAAAAAAMD//38AAAAAAAAA/P9/AA8AAAAAAAAAwP////8HAAAAAAAAAAAAAAAAAAAAAOD//x8AAAAAAAAA+P9/AAcAAAAAAAAA4P////8PAAAAAAAAAAAAAAAAAAAAAOD//w8AAAAAAAAA+P8fAAIAAAAAAAAAwP////8fAAAAAAAAAAAAAAAAAAAAAOD//wcAAAAAAAAA+P8fAAAAAAAAAAAA4P////8fAAAAAAAAAAAAAAAAAAAAAOD//wcAAAAAAAAA+P8fAAAAAAAAAAAAwP////8fAAAAAAAAAAAAAAAAAAAAAOD//wcAAAAAAAAA8P8PAAAAAAAAAAAAgP////8/AAAAAAAAAAAAAAAAAAAAAOD//wMAAAAAAAAA4P8HAAAAAAAAAAAAgP////8fAAAAAAAAAAAAAAAAAAAAAPD//wMAAAAAAAAA4P8HAAAAAAAAAAAAgP////8fAAAAAAAAAAAAAAAAAAAAAPD//wEAAAAAAAAAwP8DAAAAAAAAAAAAAP////8fAAAAAAAAAAAAAAAAAAAAAOD//wAAAAAAAAAAwP8BAAAAAAAAAAAAAP8D/P8PAAAAAAAAAAAAAAAAAAAAAPD/fwAAAAAAAAAAwH8AAAAAAAAAAAAAgP8A2P8HAAAAAAAAAAAAAAAAAAAAAPD/OwAAAAAAAAAAgAEAAAAAAAAAAAAAAAcA6P8HAAAAAAAAAAAAAAAAAAAAAPj/BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwP8DAAACAAAAAAAAAAAAAAAAAPj/BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8DAAAEAAAAAAAAAAAAAAAAAPz/BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8DAAAIAAAAAAAAAAAAAAAAAPj/AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGgAAAA4AAAAAAAAAAAAAAAAAPg/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAPw/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAPwHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAALAAAAAAAAAAAAAAAAAPwfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAIADAAAAAAAAAAAAAAAAAPgHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAMABAAAAAAAAAAAAAAAAAPwHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAAP4BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAAAAAAAAAAAAAAAAAAP4BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAP4DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4AAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAIAfAAAAAAAeeADADwAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAPD/AADA/////////z8AAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAgP///wH4//////////8DAAAAAAAAAAAAAAAAAAAAADAfAAAAAAAAAAAAAADw8////wP+////////////AwAAAAAAAAAAAAAAAAAAAHA/AAAAAAAAAAA8//P//////+D/////////////HwAAAAAAAAAAAAAAAAAAAP5+AAAAAAAA5v////////////D//////////////38AAAAAAAAAAAAAAAAAAAB+AAAAAACA/////////////////////////////38AAAAAAAAAYAYA4ON/OPh/AAAAAADw/////////////////////////////x8AAAAAAADwv/EXgP////8fAAAAAADw/////////////////////////////wMAAAAAAPz///////////8HAAAAAAD+/////////////////////////////wAAAAAAAPz//////////z8AAAAAAP///////////////////////////////wAAAADA/////////////wEAAAAA8P///////////////////////////////wAAAACH////////////PwAAAPgA/////////////////////////////////wcAAAAcgP//////////fwAAAP4BwP//////////////////////////////HwAAAAAAAP7//////////wf8wD8AwP//////////////////////////////DwAAAAAA/v////////////8HAAD4////////////////////////////////HwAAAAAA+P//////////////4f///////////////////////////////////wAAAAAA/P///////////////////////////////////////////////////x8A3x8AAP7///////////////////////////////////////////////////8/////f///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////';
+  var maskBytes = (function(){
+    var s = atob(LAND_MASK), b = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+    return b;
+  })();
+  function isLand(lat, lon){
+    var x = Math.min(359, Math.floor(lon + 180)), y = Math.min(179, Math.floor(90 - lat));
+    var i = y*360 + x;
+    return (maskBytes[i >> 3] >> (i & 7)) & 1;
+  }
 
   // Abstract global points (visual anchors only — not verified routes or statistics)
   var HUB_DATA = [
-    {lat:25.2, lon:55.3, home:true},   // Dubai — origin hub
-    {lat:51.5, lon:-0.1}, {lat:40.7, lon:-74.0}, {lat:1.3, lon:103.8},
-    {lat:22.3, lon:114.2}, {lat:50.1, lon:8.7}, {lat:35.7, lon:139.7},
-    {lat:-23.5, lon:-46.6}, {lat:-26.2, lon:28.0}, {lat:-33.9, lon:151.2},
-    {lat:34.0, lon:-118.2}
+    {name:'Dubai', lat:25.2, lon:55.3, home:true},
+    {name:'United Kingdom', lat:52.6, lon:-1.6, pos:'left'},
+    {name:'France', lat:46.6, lon:2.4, pos:'left'},
+    {name:'Netherlands', lat:52.3, lon:5.6, pos:'top'},
+    {name:'Germany', lat:51.0, lon:10.4, pos:'right'},
+    {name:'Italy', lat:42.6, lon:12.6, pos:'right'}
   ];
-
-  var ARCS = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[1,2],[3,4],[6,10]];
-
-  // Coarse landmass regions (lat/lon) used to hint continents with faint dots
-  var LAND = [
-    {lat0:25,lat1:72,lon0:-168,lon1:-55},
-    {lat0:15,lat1:25,lon0:-110,lon1:-83},
-    {lat0:60,lat1:83,lon0:-73,lon1:-20},
-    {lat0:-56,lat1:12,lon0:-82,lon1:-34},
-    {lat0:36,lat1:71,lon0:-10,lon1:40},
-    {lat0:-35,lat1:37,lon0:-18,lon1:52},
-    {lat0:50,lat1:75,lon0:40,lon1:180},
-    {lat0:20,lat1:50,lon0:75,lon1:135},
-    {lat0:8,lat1:30,lon0:68,lon1:92},
-    {lat0:-10,lat1:20,lon0:95,lon1:140},
-    {lat0:12,lat1:40,lon0:35,lon1:60},
-    {lat0:-40,lat1:-10,lon0:112,lon1:154}
-  ];
+  var ARCS = [[0,1],[0,2],[0,3],[0,4],[0,5]];
 
   function unit(lat, lon){
     var la = lat*Math.PI/180, lo = lon*Math.PI/180, c = Math.cos(la);
     return {x:c*Math.cos(lo), y:Math.sin(la), z:c*Math.sin(lo)};
   }
   function slerp(a, b, t){
-    var dot = a.x*b.x + a.y*b.y + a.z*b.z;
-    dot = dot > 1 ? 1 : (dot < -1 ? -1 : dot);
+    var dot = Math.max(-1, Math.min(1, a.x*b.x + a.y*b.y + a.z*b.z));
     var w = Math.acos(dot);
     if (w < 1e-5) return {x:a.x, y:a.y, z:a.z};
     var s = Math.sin(w), k0 = Math.sin((1-t)*w)/s, k1 = Math.sin(t*w)/s;
     return {x:a.x*k0+b.x*k1, y:a.y*k0+b.y*k1, z:a.z*k0+b.z*k1};
   }
 
+  var dots = [], hubs = [], arcs = [];
   function buildData(){
-    dots = [];
-    var lat, lon;
-    for (lat=-60; lat<=60; lat+=30){
-      for (lon=-180; lon<180; lon+=6) dots.push({p:unit(lat,lon), kind:'grid'});
+    // Fibonacci sphere, keep only points over land
+    var N = 90000, golden = Math.PI*(3 - Math.sqrt(5));
+    for (var i = 0; i < N; i++){
+      var y = 1 - (i/(N-1))*2, r = Math.sqrt(1 - y*y), th = golden*i;
+      var lat = Math.asin(y)*180/Math.PI;
+      var lon = ((Math.atan2(Math.sin(th)*r, Math.cos(th)*r)*180/Math.PI) + 540) % 360 - 180;
+      if (lat > -58 && isLand(lat, lon)) dots.push(unit(lat, lon));
     }
-    for (lon=-180; lon<180; lon+=30){
-      for (lat=-75; lat<=75; lat+=6) dots.push({p:unit(lat,lon), kind:'grid'});
-    }
-    var seen = {};
-    LAND.forEach(function(r){
-      for (lat=r.lat0; lat<=r.lat1; lat+=6){
-        for (lon=r.lon0; lon<=r.lon1; lon+=6){
-          var key = Math.round(lat)+','+Math.round(lon);
-          if (seen[key]) continue;
-          seen[key] = 1;
-          dots.push({p:unit(lat,lon), kind:'land'});
-        }
-      }
-    });
-    hubs = HUB_DATA.map(function(h){ return {p:unit(h.lat,h.lon), home:!!h.home}; });
+    hubs = HUB_DATA.map(function(h){ return {p:unit(h.lat, h.lon), home:!!h.home, name:h.name, pos:h.pos || 'right'}; });
     arcs = ARCS.map(function(pair, idx){
-      var a = hubs[pair[0]].p, b = hubs[pair[1]].p, pts = [];
-      for (var t=0; t<=1; t+=1/46) pts.push(slerp(a,b,t));
-      return {pts:pts, speed:0.05 + (idx%5)*0.013, phase:(idx*0.37)%1};
+      var a = hubs[pair[0]].p, b = hubs[pair[1]].p;
+      var ang = Math.acos(Math.max(-1, Math.min(1, a.x*b.x + a.y*b.y + a.z*b.z)));
+      var lift = 0.04 + ang*0.09, pts = [];
+      for (var k = 0; k <= 48; k++){
+        var t = k/48, p = slerp(a, b, t), h = 1 + lift*Math.sin(Math.PI*t);
+        pts.push({x:p.x*h, y:p.y*h, z:p.z*h});
+      }
+      return {pts:pts, speed:0.16 + (idx%4)*0.035, phase:(idx*0.29)%1};
     });
   }
 
-  var baseRotY = -0.6, rotY = -0.6, rotX = -0.30;
-  var parX = 0, parY = 0, tgtX = 0, tgtY = 0;
-  var running = false, raf = null, lastT = 0;
-
+  var W = 0, H = 0, R = 0, cx = 0, cy = 0, dpr = 1;
   function resize(){
     var rect = globe.getBoundingClientRect();
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = rect.width; H = rect.height;
     canvas.width = Math.round(W*dpr);
     canvas.height = Math.round(H*dpr);
-    canvas.style.width = W+'px';
-    canvas.style.height = H+'px';
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    R = Math.min(W,H)*0.42;
-    cx = W/2; cy = H/2;
+    R = Math.min(W, H)*0.8;
+    cx = W/2; cy = H*0.95;
   }
 
-  var cosY, sinY, cosX, sinX, T = {x:0,y:0,z:0};
-  function tr(x,y,z){
-    var x1 = x*cosY + z*sinY;
-    var z1 = -x*sinY + z*cosY;
-    T.x = x1;
-    T.y = y*cosX - z1*sinX;
-    T.z = y*sinX + z1*cosX;
+  // Face Europe (with Dubai in view), tilted so the northern hemisphere reads
+  var HOME_Y = 30*Math.PI/180 - Math.PI/2, rotY = HOME_Y, rotX = 0.12;
+  var cosY, sinY, cosX, sinX, T = {x:0, y:0, z:0};
+  function tr(p){
+    var x1 = p.x*cosY + p.z*sinY;
+    var z1 = -p.x*sinY + p.z*cosY;
+    T.x = cx - x1*R;
+    T.y = cy - (p.y*cosX - z1*sinX)*R;
+    T.z = p.y*sinX + z1*cosX;
   }
+  function hidden(){ // behind the sphere and inside its silhouette
+    if (T.z >= 0) return false;
+    var dx = T.x - cx, dy = T.y - cy;
+    return dx*dx + dy*dy < R*R;
+  }
+
+  var ORANGE = '241,140,74';
+  var LABEL_OFFSETS = { // [dx, dy, textAlign]
+    home: [0, 18, 'center'], right: [9, 0, 'left'], left: [-9, 0, 'right'],
+    top: [-4, -13, 'left'], 'bottom-left': [-7, 10, 'right']
+  };
+  var BUCKETS = 10, bucketPaths = [];
+
   function draw(time){
-    ctx.clearRect(0,0,W,H);
+    ctx.clearRect(0, 0, W, H);
     cosY = Math.cos(rotY); sinY = Math.sin(rotY);
     cosX = Math.cos(rotX); sinX = Math.sin(rotX);
+    var i, j;
 
-    // atmosphere
-    var atmo = ctx.createRadialGradient(cx,cy,R*0.85,cx,cy,R*1.4);
-    atmo.addColorStop(0,'rgba(77,141,255,0.12)');
-    atmo.addColorStop(0.55,'rgba(139,92,246,0.09)');
-    atmo.addColorStop(1,'rgba(0,0,0,0)');
+    // atmosphere halo
+    var atmo = ctx.createRadialGradient(cx, cy, R*0.9, cx, cy, R*1.32);
+    atmo.addColorStop(0, 'rgba(' + ORANGE + ',0.16)');
+    atmo.addColorStop(0.35, 'rgba(120,140,255,0.07)');
+    atmo.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = atmo;
-    ctx.beginPath(); ctx.arc(cx,cy,R*1.4,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, R*1.32, 0, Math.PI*2); ctx.fill();
 
     // sphere body
-    var sp = ctx.createRadialGradient(cx-R*0.4, cy-R*0.5, R*0.08, cx, cy, R);
-    sp.addColorStop(0,'#10203e');
-    sp.addColorStop(0.55,'#0a1428');
-    sp.addColorStop(1,'#050a14');
-    ctx.fillStyle = sp;
-    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+    var body = ctx.createRadialGradient(cx - R*0.35, cy - R*0.45, R*0.05, cx, cy, R);
+    body.addColorStop(0, '#1a1f2b');
+    body.addColorStop(0.6, '#0d1018');
+    body.addColorStop(1, '#06070b');
+    ctx.fillStyle = body;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
 
-    ctx.save();
-    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
-
-    // graticule + land dots
-    var i, d, s, a;
-    for (i=0; i<dots.length; i++){
-      d = dots[i];
-      tr(d.p.x, d.p.y, d.p.z);
-      if (T.z <= 0.02) continue;
-      a = Math.min(1, T.z*2.2);
-      s = d.kind === 'land' ? 1.6 : 1.1;
-      ctx.globalAlpha = a;
-      ctx.fillStyle = d.kind === 'land' ? 'rgb(160,185,240)' : 'rgb(122,152,220)';
-      ctx.fillRect(cx + T.x*R - s/2, cy - T.y*R - s/2, s, s);
+    // land dots, batched by brightness
+    for (i = 0; i < BUCKETS; i++) bucketPaths[i] = [];
+    for (i = 0; i < dots.length; i++){
+      tr(dots[i]);
+      if (T.z <= 0) continue;
+      var lit = Math.pow(T.z, 0.7)*0.8 + Math.max(0, (cx - T.x)/R*0.12 + (cy - T.y)/R*0.12);
+      bucketPaths[Math.min(BUCKETS-1, Math.floor(lit*BUCKETS))].push(T.x, T.y);
+    }
+    var ds = Math.max(1.3, R/180);
+    ctx.fillStyle = '#e6ebf5';
+    for (i = 0; i < BUCKETS; i++){
+      var b = bucketPaths[i];
+      if (!b.length) continue;
+      ctx.globalAlpha = 0.12 + (i/(BUCKETS-1))*0.78;
+      ctx.beginPath();
+      for (j = 0; j < b.length; j += 2) ctx.rect(b[j] - ds/2, b[j+1] - ds/2, ds, ds);
+      ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    // faint base arcs
-    ctx.strokeStyle = 'rgba(120,150,255,0.22)';
+    // rim light
+    var rim = ctx.createRadialGradient(cx, cy, R*0.82, cx, cy, R);
+    rim.addColorStop(0, 'rgba(255,255,255,0)');
+    rim.addColorStop(1, 'rgba(255,214,186,0.10)');
+    ctx.fillStyle = rim;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
-    var ai, t;
-    for (ai=0; ai<arcs.length; ai++){
-      var arc = arcs[ai], started = false;
+    ctx.stroke();
+
+    // route arcs: faint base + travelling comet
+    ctx.lineCap = 'round';
+    for (i = 0; i < arcs.length; i++){
+      var pts = arcs[i].pts, n = pts.length - 1;
+      ctx.strokeStyle = 'rgba(' + ORANGE + ',0.22)';
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      for (t=0; t<arc.pts.length; t++){
-        var lift = Math.sin(Math.PI*t/(arc.pts.length-1)) * 0.18;
-        tr(arc.pts[t].x, arc.pts[t].y, arc.pts[t].z);
-        var sxn = cx + T.x*R*(1+lift);
-        var syn = cy - T.y*R*(1+lift);
-        if (T.z > 0.02){
-          if (!started){ ctx.moveTo(sxn,syn); started = true; }
-          else ctx.lineTo(sxn,syn);
-        } else started = false;
+      var pen = false;
+      for (j = 0; j <= n; j++){
+        tr(pts[j]);
+        if (hidden()){ pen = false; continue; }
+        if (pen) ctx.lineTo(T.x, T.y); else { ctx.moveTo(T.x, T.y); pen = true; }
       }
       ctx.stroke();
+
+      var head = ((arcs[i].phase + time*arcs[i].speed) % 1.6) * n; // pause between pulses
+      var tail = n*0.28;
+      ctx.lineWidth = 1.8;
+      for (j = Math.max(1, Math.floor(head - tail)); j <= Math.min(n, Math.floor(head)); j++){
+        tr(pts[j-1]);
+        if (hidden()) continue;
+        var x0 = T.x, y0 = T.y;
+        tr(pts[j]);
+        if (hidden()) continue;
+        ctx.strokeStyle = 'rgba(' + ORANGE + ',' + (1 - (head - j)/tail).toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(T.x, T.y); ctx.stroke();
+      }
     }
 
-    // moving light pulses along arcs
-    for (ai=0; ai<arcs.length; ai++){
-      var arc2 = arcs[ai];
-      var prog = (arc2.phase + time*arc2.speed) % 1;
-      var fi = prog*(arc2.pts.length-1);
-      var i0 = Math.floor(fi), i1 = Math.min(i0+1, arc2.pts.length-1), f = fi - i0;
-      tr(arc2.pts[i0].x*(1-f) + arc2.pts[i1].x*f,
-         arc2.pts[i0].y*(1-f) + arc2.pts[i1].y*f,
-         arc2.pts[i0].z*(1-f) + arc2.pts[i1].z*f);
-      if (T.z <= 0.02) continue;
-      var lift2 = Math.sin(Math.PI*prog)*0.18;
-      var sxn2 = cx + T.x*R*(1+lift2);
-      var syn2 = cy - T.y*R*(1+lift2);
-      var g = ctx.createRadialGradient(sxn2,syn2,0,sxn2,syn2,7);
-      g.addColorStop(0,'rgba(225,238,255,0.95)');
-      g.addColorStop(0.4,'rgba(120,160,255,0.5)');
-      g.addColorStop(1,'rgba(120,160,255,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(sxn2,syn2,7,0,Math.PI*2); ctx.fill();
-    }
-
-    ctx.restore(); // unclip
-
-    // glowing hubs
-    for (i=0; i<hubs.length; i++){
+    // hubs + labels
+    ctx.font = '600 11px Inter, system-ui, sans-serif';
+    ctx.textBaseline = 'middle';
+    for (i = 0; i < hubs.length; i++){
       var hub = hubs[i];
-      tr(hub.p.x, hub.p.y, hub.p.z);
-      if (T.z <= 0.02) continue;
-      var sxn3 = cx + T.x*R, syn3 = cy - T.y*R;
-      var pr = hub.home ? 12 : 8;
-      var hg = ctx.createRadialGradient(sxn3,syn3,0,sxn3,syn3,pr);
-      hg.addColorStop(0, hub.home ? 'rgba(255,255,255,0.95)' : 'rgba(230,240,255,0.9)');
-      hg.addColorStop(0.35, 'rgba(77,141,255,0.9)');
-      hg.addColorStop(1, 'rgba(77,141,255,0)');
-      ctx.fillStyle = hg;
-      ctx.beginPath(); ctx.arc(sxn3,syn3,pr,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle = hub.home ? '#ffffff' : '#dbe7ff';
-      ctx.beginPath(); ctx.arc(sxn3,syn3, hub.home?2.6:2, 0, Math.PI*2); ctx.fill();
+      tr(hub.p);
+      if (T.z <= 0.05) continue;
+      var fade = Math.min(1, T.z*2.5);
+      ctx.globalAlpha = fade;
+      if (hub.home){
+        for (var k = 0; k < 2; k++){ // pulsing rings
+          var ph = (time*0.55 + k*0.5) % 1;
+          ctx.strokeStyle = 'rgba(' + ORANGE + ',' + (0.7*(1 - ph)).toFixed(3) + ')';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(T.x, T.y, 4 + ph*22, 0, Math.PI*2); ctx.stroke();
+        }
+      }
+      var g = ctx.createRadialGradient(T.x, T.y, 0, T.x, T.y, hub.home ? 14 : 8);
+      g.addColorStop(0, 'rgba(' + ORANGE + ',0.9)');
+      g.addColorStop(1, 'rgba(' + ORANGE + ',0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(T.x, T.y, hub.home ? 14 : 8, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(T.x, T.y, hub.home ? 3.2 : 2, 0, Math.PI*2); ctx.fill();
+
+      if (W > 300){
+        var text = hub.home ? 'DUBAI · HQ' : hub.name.toUpperCase();
+        var off = LABEL_OFFSETS[hub.home ? 'home' : hub.pos];
+        ctx.globalAlpha = fade*(hub.home ? 1 : 0.8);
+        ctx.fillStyle = hub.home ? 'rgb(' + ORANGE + ')' : '#d6dbe5';
+        ctx.textAlign = off[2];
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(8,10,14,0.9)';
+        ctx.strokeText(text, T.x + off[0], T.y + off[1]);
+        ctx.fillText(text, T.x + off[0], T.y + off[1]);
+      }
     }
+    ctx.globalAlpha = 1;
   }
+
+  // gentle sway around Europe + drag to spin (with inertia, then eases back home)
+  var running = false, raf = null, lastT = 0, vel = 0, dragging = false, lastX = 0, offset = 0;
   function loop(ts){
     if (!running){ raf = null; return; }
     if (!lastT) lastT = ts;
     var dt = Math.min(50, ts - lastT);
     lastT = ts;
-    if (!reducedMotion){
-      baseRotY += dt*0.00012;   // slow, elegant auto-rotation
-      parX += (tgtX - parX)*0.06;
-      parY += (tgtY - parY)*0.06;
-      rotY = baseRotY + parX*0.25;
-      rotX = -0.30 + parY*0.22;
+    if (!dragging){
+      offset += vel*dt;
+      vel *= Math.pow(0.95, dt/16);
+      offset *= Math.pow(0.985, dt/16);
     }
+    rotY = HOME_Y + offset + Math.sin(ts/1000*0.22)*0.06;
     draw(ts/1000);
     raf = requestAnimationFrame(loop);
   }
-
   function start(){ if (running) return; running = true; lastT = 0; raf = requestAnimationFrame(loop); }
   function stop(){ running = false; if (raf){ cancelAnimationFrame(raf); raf = null; } }
 
-  // ambient cursor light (desktop only)
-  var lightEl = globe.querySelector('.globe__light');
-  var lx = 0.5, ly = 0.5, llx = 0.5, lly = 0.5, hovering = false, lightRaf = null;
-
-  function lightFrame(){
-    llx += (lx - llx)*0.09;
-    lly += (ly - lly)*0.09;
-    var r = globe.getBoundingClientRect();
-    lightEl.style.transform = 'translate3d(' + (llx*r.width).toFixed(1) + 'px,' + (lly*r.height).toFixed(1) + 'px,0) translate(-50%,-50%)';
-    lightEl.style.opacity = hovering ? '1' : '0';
-    var settle = !hovering && (Math.abs(llx-0.5) > 0.01 || Math.abs(lly-0.5) > 0.01);
-    if (hovering || settle) lightRaf = requestAnimationFrame(lightFrame);
-    else lightRaf = null;
-  }
-
-  if (finePointer && !reducedMotion){
-    globe.addEventListener('pointermove', function(e){
-      var r = globe.getBoundingClientRect();
-      var nx = Math.min(1, Math.max(0, (e.clientX - r.left)/r.width));
-      var ny = Math.min(1, Math.max(0, (e.clientY - r.top)/r.height));
-      lx = nx; ly = ny;
-      tgtX = (nx - 0.5)*2;
-      tgtY = (ny - 0.5)*2;
-      hovering = true;
-      if (!lightRaf) lightRaf = requestAnimationFrame(lightFrame);
+  if (!reducedMotion){
+    globe.addEventListener('pointerdown', function(e){
+      dragging = true; lastX = e.clientX; vel = 0;
+      globe.classList.add('is-dragging');
+      globe.setPointerCapture(e.pointerId);
     });
-    globe.addEventListener('pointerleave', function(){
-      hovering = false; lx = 0.5; ly = 0.5; tgtX = 0; tgtY = 0;
-      if (!lightRaf) lightRaf = requestAnimationFrame(lightFrame);
+    globe.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      var dx = e.clientX - lastX;
+      lastX = e.clientX;
+      offset -= dx*0.005;
+      vel = -dx*0.0003;
+    });
+    ['pointerup','pointercancel'].forEach(function(t){
+      globe.addEventListener(t, function(){ dragging = false; globe.classList.remove('is-dragging'); });
     });
   }
 

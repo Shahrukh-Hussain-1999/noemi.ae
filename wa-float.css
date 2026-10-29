@@ -1,0 +1,28 @@
+/* Floating WhatsApp button — shared by index.html and the legal pages */
+.wa-float{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(28px,env(safe-area-inset-bottom));z-index:900;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;text-decoration:none;-webkit-tap-highlight-color:transparent;box-shadow:0 0 0 1px rgba(255,255,255,.18) inset,0 10px 24px -8px rgba(18,140,74,.55),0 4px 10px rgba(8,9,11,.18);transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease,background-color .25s ease;animation:wa-float-in .7s cubic-bezier(.22,.61,.36,1) .9s backwards}
+.wa-float svg{position:relative;z-index:1;width:30px;height:30px;display:block}
+.wa-float::before{content:"";position:absolute;inset:0;border-radius:50%;background:#25D366;z-index:0;opacity:0;pointer-events:none;animation:wa-float-halo 6s ease-out 2.4s infinite}
+.wa-float:hover{transform:translateY(-2px) scale(1.06);background:#2bdc6c;box-shadow:0 0 0 1px rgba(255,255,255,.22) inset,0 16px 32px -10px rgba(18,140,74,.65),0 6px 14px rgba(8,9,11,.2)}
+.wa-float:active{transform:scale(.94);transition-duration:.1s}
+.wa-float:focus{outline:none}
+.wa-float:focus-visible{outline:3px solid #fff;outline-offset:3px;box-shadow:0 0 0 7px #128C4A,0 10px 24px -8px rgba(18,140,74,.55)}
+.wa-float__tip{position:absolute;right:calc(100% + 14px);top:50%;transform:translate(8px,-50%);white-space:nowrap;padding:9px 14px;border-radius:10px;background:#111318;color:#fff;font:500 13px/1.2 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.01em;box-shadow:0 10px 24px -10px rgba(8,9,11,.5);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,transform .3s cubic-bezier(.22,.61,.36,1),visibility .25s}
+.wa-float__tip::after{content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#111318}
+.wa-float:focus-visible .wa-float__tip{opacity:1;visibility:visible;transform:translate(0,-50%)}
+@media(hover:hover){.wa-float:hover .wa-float__tip{opacity:1;visibility:visible;transform:translate(0,-50%)}}
+@media(hover:none){.wa-float__tip{display:none}}
+@keyframes wa-float-in{from{opacity:0;transform:translateY(18px) scale(.8)}to{opacity:1;transform:none}}
+@keyframes wa-float-halo{0%{opacity:.45;transform:scale(1)}30%{opacity:0;transform:scale(1.55)}100%{opacity:0;transform:scale(1.55)}}
+@media(max-width:767px){
+  .wa-float{right:max(16px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));width:54px;height:54px}
+  .wa-float svg{width:28px;height:28px}
+}
+/* keep the last footer line clear of the button */
+@media(max-width:1023px){.site-footer,.legal-footer{padding-bottom:104px}}
+@media(prefers-reduced-motion:reduce){
+  .wa-float{animation:none;transition:none}
+  .wa-float::before{animation:none;display:none}
+  .wa-float:hover{transform:none}
+  .wa-float__tip{transition:none}
+}
+@media print{.wa-float{display:none}}
